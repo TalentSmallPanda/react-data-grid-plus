@@ -17,6 +17,7 @@ const mainClassname = css`
   block-size: 100vh;
   padding: 8px;
   contain: inline-size;
+  overflow: auto;
 `;
 
 function Root() {

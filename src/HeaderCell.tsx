@@ -70,6 +70,8 @@ export interface HeaderCellProps<R, SR> extends SharedHeaderRowProps<R, SR> {
   rowIdx: number;
   isCellSelected: boolean;
   dragDropKey: string;
+  headerRowHeight: number | number[],
+  depth: number
 }
 
 export default function HeaderCell<R, SR>({
@@ -84,7 +86,9 @@ export default function HeaderCell<R, SR>({
   selectCell,
   shouldFocusGrid,
   direction,
-  dragDropKey
+  dragDropKey,
+  headerRowHeight,
+  depth
 }: HeaderCellProps<R, SR>) {
   const [isDragging, setIsDragging] = useState(false);
   const [isOver, setIsOver] = useState(false);
@@ -287,7 +291,7 @@ export default function HeaderCell<R, SR>({
       tabIndex={shouldFocusGrid ? 0 : tabIndex}
       className={className}
       style={{
-        ...getHeaderCellStyle(column, rowIdx, rowSpan),
+        ...getHeaderCellStyle(column, rowIdx, rowSpan, headerRowHeight, depth),
         ...getCellStyle(column, colSpan)
       }}
       onFocus={handleFocus}

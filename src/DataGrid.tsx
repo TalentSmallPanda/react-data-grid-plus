@@ -140,7 +140,7 @@ export interface DataGridProps<R, SR = unknown, K extends Key = Key> extends Sha
    * The height of the header row in pixels
    * @default 35
    */
-  headerRowHeight?: Maybe<number>;
+  headerRowHeight?: Maybe<number | number[]>;
   /**
    * The height of each summary row in pixels
    * @default 35
@@ -206,6 +206,22 @@ export interface DataGridProps<R, SR = unknown, K extends Key = Key> extends Sha
   direction?: Maybe<Direction>;
   'data-testid'?: Maybe<string>;
   'data-cy'?: Maybe<string>;
+}
+
+export function adjustArray(arr: number[], count: number,): number[] {
+  if (arr.length >= count) {
+    // 如果数组长度大于等于 count，截取到 count 长度
+    return arr.slice(0, count);
+  }
+  if (arr.length === 0) {
+    // 如果数组为空，返回一个由 35 组成的新数组
+    return new Array(count).fill(35) as number[];
+  }
+  // 如果数组长度小于 count，补充最后一个元素
+  const arr1 = [] as number[]
+  const lastElement = arr[arr.length - 1];
+  return arr1.concat(arr).concat(new Array(count - arr.length).fill(lastElement));
+
 }
 
 /**
@@ -275,7 +291,7 @@ function DataGrid<R, SR, K extends Key>(
   const defaultRenderers = useDefaultRenderers<R, SR>();
   const role = rawRole ?? 'grid';
   const rowHeight = rawRowHeight ?? 35;
-  const headerRowHeight = rawHeaderRowHeight ?? (typeof rowHeight === 'number' ? rowHeight : 35);
+  let headerRowHeight = rawHeaderRowHeight ?? (typeof rowHeight === 'number' ? rowHeight : 35);
   const summaryRowHeight = rawSummaryRowHeight ?? (typeof rowHeight === 'number' ? rowHeight : 35);
   const renderRow = renderers?.renderRow ?? defaultRenderers?.renderRow ?? defaultRenderRow;
   const renderCell = renderers?.renderCell ?? defaultRenderers?.renderCell ?? defaultRenderCell;
@@ -357,7 +373,10 @@ function DataGrid<R, SR, K extends Key>(
    * computed values
    */
   const isTreeGrid = role === 'treegrid';
-  const headerRowsHeight = headerRowsCount * headerRowHeight;
+  headerRowHeight = Array.isArray(headerRowHeight) ? adjustArray(headerRowHeight, headerRowsCount) : headerRowHeight
+  const headerRowsHeight = Array.isArray(headerRowHeight)
+    ? headerRowHeight.reduce((total, height) => total + height, 0)
+    : headerRowsCount * headerRowHeight;
   const summaryRowsHeight = summaryRowsCount * summaryRowHeight;
   const clientHeight = gridHeight - headerRowsHeight - summaryRowsHeight;
   const isSelectable = selectedRows != null && onSelectedRowsChange != null;
@@ -444,8 +463,6 @@ function DataGrid<R, SR, K extends Key>(
   const maxColIdx = columns.length - 1;
   const selectedCellIsWithinSelectionBounds = isCellWithinSelectionBounds(selectedPosition);
   const selectedCellIsWithinViewportBounds = isCellWithinViewportBounds(selectedPosition);
-  const scrollHeight =
-    headerRowHeight + totalRowHeight + summaryRowsHeight + horizontalScrollbarHeight;
 
   /**
    * The identity of the wrapper function is stable so it won't break memoization
@@ -976,10 +993,10 @@ function DataGrid<R, SR, K extends Key>(
       return selectedPosition.idx > colOverscanEndIdx
         ? [...viewportColumns, selectedColumn]
         : [
-            ...viewportColumns.slice(0, lastFrozenColumnIndex + 1),
-            selectedColumn,
-            ...viewportColumns.slice(lastFrozenColumnIndex + 1)
-          ];
+          ...viewportColumns.slice(0, lastFrozenColumnIndex + 1),
+          selectedColumn,
+          ...viewportColumns.slice(lastFrozenColumnIndex + 1)
+        ];
     }
     return viewportColumns;
   }
@@ -1064,7 +1081,13 @@ function DataGrid<R, SR, K extends Key>(
     setDraggedOverRowIdx(undefined);
   }
 
-  let templateRows = `repeat(${headerRowsCount}, ${headerRowHeight}px)`;
+  let templateRows = ``;
+  if (Array.isArray(headerRowHeight)) {
+    const str = headerRowHeight.map(o => `${o}px`).join(' ');
+    templateRows += str
+  } else {
+    templateRows += `repeat(${headerRowsCount}, ${headerRowHeight}px)`
+  }
   if (topSummaryRowsCount > 0) {
     templateRows += ` repeat(${topSummaryRowsCount}, ${summaryRowHeight}px)`;
   }
@@ -1106,15 +1129,13 @@ function DataGrid<R, SR, K extends Key>(
               : undefined,
           scrollPaddingBlock:
             isRowIdxWithinViewportBounds(selectedPosition.rowIdx) ||
-            scrollToPosition?.rowIdx !== undefined
-              ? `${headerRowsHeight + topSummaryRowsCount * summaryRowHeight}px ${
-                  bottomSummaryRowsCount * summaryRowHeight
-                }px`
+              scrollToPosition?.rowIdx !== undefined
+              ? `${headerRowsHeight + topSummaryRowsCount * summaryRowHeight}px ${bottomSummaryRowsCount * summaryRowHeight
+              }px`
               : undefined,
           gridTemplateColumns,
           gridTemplateRows: templateRows,
           '--rdg-header-row-height': `${headerRowHeight}px`,
-          '--rdg-scroll-height': `${scrollHeight}px`,
           ...layoutCssVars
         } as unknown as React.CSSProperties
       }
@@ -1138,6 +1159,8 @@ function DataGrid<R, SR, K extends Key>(
                   selectedPosition.rowIdx === minRowIdx + index ? selectedPosition.idx : undefined
                 }
                 selectCell={selectHeaderCellLatest}
+                headerRowHeight={headerRowHeight}
+                depth={headerRowsCount}
               />
             ))}
             <HeaderRow
@@ -1154,6 +1177,8 @@ function DataGrid<R, SR, K extends Key>(
               selectCell={selectHeaderCellLatest}
               shouldFocusGrid={!selectedCellIsWithinSelectionBounds}
               direction={direction}
+              headerRowHeight={headerRowHeight}
+              depth={headerRowsCount}
             />
           </HeaderRowSelectionProvider>
         </HeaderRowSelectionChangeProvider>

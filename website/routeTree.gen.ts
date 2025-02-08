@@ -32,6 +32,7 @@ const HeaderFiltersLazyImport = createFileRoute('/HeaderFilters')()
 const CustomizableRenderersLazyImport = createFileRoute(
   '/CustomizableRenderers',
 )()
+const CustomColumnHeightLazyImport = createFileRoute('/CustomColumnHeight')()
 const ContextMenuLazyImport = createFileRoute('/ContextMenu')()
 const CommonFeaturesLazyImport = createFileRoute('/CommonFeatures')()
 const ColumnsReorderingLazyImport = createFileRoute('/ColumnsReordering')()
@@ -120,6 +121,14 @@ const CustomizableRenderersLazyRoute = CustomizableRenderersLazyImport.update({
   getParentRoute: () => rootRoute,
 } as any).lazy(() =>
   import('./routes/CustomizableRenderers.lazy').then((d) => d.Route),
+)
+
+const CustomColumnHeightLazyRoute = CustomColumnHeightLazyImport.update({
+  id: '/CustomColumnHeight',
+  path: '/CustomColumnHeight',
+  getParentRoute: () => rootRoute,
+} as any).lazy(() =>
+  import('./routes/CustomColumnHeight.lazy').then((d) => d.Route),
 )
 
 const ContextMenuLazyRoute = ContextMenuLazyImport.update({
@@ -253,6 +262,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ContextMenuLazyImport
       parentRoute: typeof rootRoute
     }
+    '/CustomColumnHeight': {
+      id: '/CustomColumnHeight'
+      path: '/CustomColumnHeight'
+      fullPath: '/CustomColumnHeight'
+      preLoaderRoute: typeof CustomColumnHeightLazyImport
+      parentRoute: typeof rootRoute
+    }
     '/CustomizableRenderers': {
       id: '/CustomizableRenderers'
       path: '/CustomizableRenderers'
@@ -352,6 +368,7 @@ export interface FileRoutesByFullPath {
   '/ColumnsReordering': typeof ColumnsReorderingLazyRoute
   '/CommonFeatures': typeof CommonFeaturesLazyRoute
   '/ContextMenu': typeof ContextMenuLazyRoute
+  '/CustomColumnHeight': typeof CustomColumnHeightLazyRoute
   '/CustomizableRenderers': typeof CustomizableRenderersLazyRoute
   '/HeaderFilters': typeof HeaderFiltersLazyRoute
   '/InfiniteScrolling': typeof InfiniteScrollingLazyRoute
@@ -376,6 +393,7 @@ export interface FileRoutesByTo {
   '/ColumnsReordering': typeof ColumnsReorderingLazyRoute
   '/CommonFeatures': typeof CommonFeaturesLazyRoute
   '/ContextMenu': typeof ContextMenuLazyRoute
+  '/CustomColumnHeight': typeof CustomColumnHeightLazyRoute
   '/CustomizableRenderers': typeof CustomizableRenderersLazyRoute
   '/HeaderFilters': typeof HeaderFiltersLazyRoute
   '/InfiniteScrolling': typeof InfiniteScrollingLazyRoute
@@ -401,6 +419,7 @@ export interface FileRoutesById {
   '/ColumnsReordering': typeof ColumnsReorderingLazyRoute
   '/CommonFeatures': typeof CommonFeaturesLazyRoute
   '/ContextMenu': typeof ContextMenuLazyRoute
+  '/CustomColumnHeight': typeof CustomColumnHeightLazyRoute
   '/CustomizableRenderers': typeof CustomizableRenderersLazyRoute
   '/HeaderFilters': typeof HeaderFiltersLazyRoute
   '/InfiniteScrolling': typeof InfiniteScrollingLazyRoute
@@ -427,6 +446,7 @@ export interface FileRouteTypes {
     | '/ColumnsReordering'
     | '/CommonFeatures'
     | '/ContextMenu'
+    | '/CustomColumnHeight'
     | '/CustomizableRenderers'
     | '/HeaderFilters'
     | '/InfiniteScrolling'
@@ -450,6 +470,7 @@ export interface FileRouteTypes {
     | '/ColumnsReordering'
     | '/CommonFeatures'
     | '/ContextMenu'
+    | '/CustomColumnHeight'
     | '/CustomizableRenderers'
     | '/HeaderFilters'
     | '/InfiniteScrolling'
@@ -473,6 +494,7 @@ export interface FileRouteTypes {
     | '/ColumnsReordering'
     | '/CommonFeatures'
     | '/ContextMenu'
+    | '/CustomColumnHeight'
     | '/CustomizableRenderers'
     | '/HeaderFilters'
     | '/InfiniteScrolling'
@@ -498,6 +520,7 @@ export interface RootRouteChildren {
   ColumnsReorderingLazyRoute: typeof ColumnsReorderingLazyRoute
   CommonFeaturesLazyRoute: typeof CommonFeaturesLazyRoute
   ContextMenuLazyRoute: typeof ContextMenuLazyRoute
+  CustomColumnHeightLazyRoute: typeof CustomColumnHeightLazyRoute
   CustomizableRenderersLazyRoute: typeof CustomizableRenderersLazyRoute
   HeaderFiltersLazyRoute: typeof HeaderFiltersLazyRoute
   InfiniteScrollingLazyRoute: typeof InfiniteScrollingLazyRoute
@@ -522,6 +545,7 @@ const rootRouteChildren: RootRouteChildren = {
   ColumnsReorderingLazyRoute: ColumnsReorderingLazyRoute,
   CommonFeaturesLazyRoute: CommonFeaturesLazyRoute,
   ContextMenuLazyRoute: ContextMenuLazyRoute,
+  CustomColumnHeightLazyRoute: CustomColumnHeightLazyRoute,
   CustomizableRenderersLazyRoute: CustomizableRenderersLazyRoute,
   HeaderFiltersLazyRoute: HeaderFiltersLazyRoute,
   InfiniteScrollingLazyRoute: InfiniteScrollingLazyRoute,
@@ -555,6 +579,7 @@ export const routeTree = rootRoute
         "/ColumnsReordering",
         "/CommonFeatures",
         "/ContextMenu",
+        "/CustomColumnHeight",
         "/CustomizableRenderers",
         "/HeaderFilters",
         "/InfiniteScrolling",
@@ -595,6 +620,9 @@ export const routeTree = rootRoute
     },
     "/ContextMenu": {
       "filePath": "ContextMenu.lazy.tsx"
+    },
+    "/CustomColumnHeight": {
+      "filePath": "CustomColumnHeight.lazy.tsx"
     },
     "/CustomizableRenderers": {
       "filePath": "CustomizableRenderers.lazy.tsx"

@@ -59,6 +59,7 @@ export default function Nav({ direction, onDirectionChange }: Props) {
       <Link to="/CellNavigation">Cell Navigation</Link>
       <Link to="/ColumnSpanning">Column Spanning</Link>
       <Link to="/ColumnGrouping">Column Grouping</Link>
+      <Link to="/CustomColumnHeight">Custom Column Height</Link>
       <Link to="/ColumnsReordering">Columns Reordering</Link>
       <Link to="/ContextMenu">Context Menu</Link>
       <Link to="/CustomizableRenderers">Customizable Renderers</Link>

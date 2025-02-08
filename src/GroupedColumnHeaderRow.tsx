@@ -10,6 +10,8 @@ export interface GroupedColumnHeaderRowProps<R, SR> {
   columns: readonly CalculatedColumn<R, SR>[];
   selectCell: (position: Position) => void;
   selectedCellIdx: number | undefined;
+  headerRowHeight: number | number[]
+  depth: number
 }
 
 function GroupedColumnHeaderRow<R, SR>({
@@ -17,7 +19,9 @@ function GroupedColumnHeaderRow<R, SR>({
   level,
   columns,
   selectedCellIdx,
-  selectCell
+  selectCell,
+  headerRowHeight,
+  depth
 }: GroupedColumnHeaderRowProps<R, SR>) {
   const cells = [];
   const renderedParents = new Set<CalculatedColumnParent<R, SR>>();
@@ -42,6 +46,8 @@ function GroupedColumnHeaderRow<R, SR>({
           rowIdx={rowIdx}
           isCellSelected={selectedCellIdx === idx}
           selectCell={selectCell}
+          headerRowHeight={headerRowHeight}
+          depth={depth}
         />
       );
     }

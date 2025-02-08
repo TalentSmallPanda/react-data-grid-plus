@@ -1,4 +1,6 @@
-# react-data-grid
+# react-data-grid-plus
+
+> 基于 [adazzle/react-data-grid](GitHub - adazzle/react-data-grid: Feature-rich and customizable data grid React component) 修改的自定义版本。
 
 [![npm-badge]][npm-url]
 [![type-badge]][npm-url]
@@ -54,17 +56,17 @@
 ## Install
 
 ```sh
-npm install react-data-grid
+npm install react-data-grid-plus
 ```
 
-`react-data-grid` is published as ECMAScript modules for evergreen browsers / bundlers, and CommonJS for server-side rendering / Jest.
+`react-data-grid-plus` is published as ECMAScript modules for evergreen browsers / bundlers, and CommonJS for server-side rendering / Jest.
 
 ## Quick start
 
 ```jsx
-import 'react-data-grid/lib/styles.css';
+import 'react-data-grid-plus/lib/styles.css';
 
-import DataGrid from 'react-data-grid';
+import DataGrid from 'react-data-grid-plus';
 
 const columns = [
   { key: 'id', name: 'ID' },
@@ -114,7 +116,7 @@ An optional array of summary rows, usually used to display total values for exam
 A function returning a unique key/identifier per row. `rowKeyGetter` is required for row selection to work.
 
 ```tsx
-import DataGrid from 'react-data-grid';
+import DataGrid from 'react-data-grid-plus';
 
 interface Row {
   id: number;
@@ -140,7 +142,7 @@ The second parameter is an object with an `indexes` array highlighting which row
 
 ```tsx
 import { useState } from 'react';
-import DataGrid from 'react-data-grid';
+import DataGrid from 'react-data-grid-plus';
 
 function MyGrid() {
   const [rows, setRows] = useState(initialRows);
@@ -181,7 +183,7 @@ A function called when row selection is changed.
 
 ```tsx
 import { useState } from 'react';
-import DataGrid, { SelectColumn } from 'react-data-grid';
+import DataGrid, { SelectColumn } from 'react-data-grid-plus';
 
 const rows: readonly Rows[] = [...];
 
@@ -224,7 +226,7 @@ A function called when sorting is changed
 
 ```tsx
 import { useState } from 'react';
-import DataGrid, { SelectColumn } from 'react-data-grid';
+import DataGrid, { SelectColumn } from 'react-data-grid-plus';
 
 const rows: readonly Rows[] = [...];
 
@@ -422,7 +424,7 @@ interface Renderers<TRow, TSummaryRow> {
 For example, the default `<Row />` component can be wrapped via the `renderRow` prop to add context providers or tweak props
 
 ```tsx
-import DataGrid, { RenderRowProps, Row } from 'react-data-grid';
+import DataGrid, { RenderRowProps, Row } from 'react-data-grid-plus';
 
 function myRowRenderer(key: React.Key, props: RenderRowProps<Row>) {
   return (
@@ -444,7 +446,7 @@ function MyGrid() {
 A function to add a class on the row
 
 ```tsx
-import DataGrid from 'react-data-grid';
+import DataGrid from 'react-data-grid-plus';
 
 function MyGrid() {
   return <DataGrid columns={columns} rows={rows} rowClass={rowClass} />;

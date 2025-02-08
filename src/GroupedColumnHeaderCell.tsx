@@ -14,13 +14,17 @@ type SharedGroupedColumnHeaderRowProps<R, SR> = Pick<
 interface GroupedColumnHeaderCellProps<R, SR> extends SharedGroupedColumnHeaderRowProps<R, SR> {
   column: CalculatedColumnParent<R, SR>;
   isCellSelected: boolean;
+  headerRowHeight: number | number[],
+  depth: number
 }
 
 export default function GroupedColumnHeaderCell<R, SR>({
   column,
   rowIdx,
   isCellSelected,
-  selectCell
+  selectCell,
+  headerRowHeight,
+  depth
 }: GroupedColumnHeaderCellProps<R, SR>) {
   const { tabIndex, onFocus } = useRovingTabIndex(isCellSelected);
   const { colSpan } = column;
@@ -41,7 +45,7 @@ export default function GroupedColumnHeaderCell<R, SR>({
       tabIndex={tabIndex}
       className={clsx(cellClassname, column.headerCellClass)}
       style={{
-        ...getHeaderCellStyle(column, rowIdx, rowSpan),
+        ...getHeaderCellStyle(column, rowIdx, rowSpan, headerRowHeight, depth),
         gridColumnStart: index,
         gridColumnEnd: index + colSpan
       }}

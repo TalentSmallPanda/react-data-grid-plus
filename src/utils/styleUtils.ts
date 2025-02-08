@@ -11,10 +11,22 @@ export function getRowStyle(rowIdx: number): CSSProperties {
 export function getHeaderCellStyle<R, SR>(
   column: CalculatedColumnOrColumnGroup<R, SR>,
   rowIdx: number,
-  rowSpan: number
+  rowSpan: number,
+  headerRowHeight: number | number[],
+  depth: number
 ): React.CSSProperties {
   const gridRowEnd = rowIdx + 1;
-  const paddingBlockStart = `calc(${rowSpan - 1} * var(--rdg-header-row-height))`;
+  let paddingBlockStart = '';
+  const p = column.parent;
+  if (Array.isArray(headerRowHeight)) {
+    const len = depth - 1;
+    const level = column.level + len;
+    const plevel = p ? p.level + len : -1;
+    const k = headerRowHeight.slice(plevel + 1, level).reduce((sum, cur) => sum + cur, 0);
+    paddingBlockStart = `${k}px`;
+  } else {
+    paddingBlockStart = `calc(${rowSpan - 1} * var(--rdg-header-row-height))`;
+  }
 
   if (column.parent === undefined) {
     return {
@@ -26,7 +38,9 @@ export function getHeaderCellStyle<R, SR>(
   }
 
   return {
-    insetBlockStart: `calc(${rowIdx - rowSpan} * var(--rdg-header-row-height))`,
+    insetBlockStart: Array.isArray(headerRowHeight)
+      ? headerRowHeight.slice(0, rowIdx - rowSpan).reduce((sum, cur) => sum + cur, 0)
+      : `calc(${rowIdx - rowSpan} * var(--rdg-header-row-height))`,
     gridRowStart: gridRowEnd - rowSpan,
     gridRowEnd,
     paddingBlockStart
