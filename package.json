@@ -48,7 +48,7 @@
     "prettier:check": "prettier --check .",
     "prettier:format": "prettier --write .",
     "typecheck": "tsc --build",
-    "prepublishOnly": "npm install && node --run build && node --run build:types",
+    "prepublishOnly": "npm run build && npm run build:types",
     "postpublish": "git push --follow-tags origin HEAD"
   },
   "dependencies": {
