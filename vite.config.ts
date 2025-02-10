@@ -35,7 +35,7 @@ const dragFill: BrowserCommand<[from: string, to: string]> = async (context, fro
 };
 
 export default defineConfig(({ command }) => ({
-  base: '/react-data-grid/',
+  base: '/react-data-grid-plus/',
   cacheDir: '.cache/vite',
   clearScreen: false,
   build: {
