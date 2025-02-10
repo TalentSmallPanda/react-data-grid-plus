@@ -4,6 +4,7 @@
 /lib
 /node_modules
 /package-lock.json
+/pnpm-lock.yaml
 __screenshots__
 
 npm-debug.log
