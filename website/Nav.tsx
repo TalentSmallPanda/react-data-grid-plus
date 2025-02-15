@@ -51,7 +51,7 @@ interface Props {
 export default function Nav({ direction, onDirectionChange }: Props) {
   return (
     <nav className={navClassname}>
-      <h1>react-data-grid</h1>
+      <h1>react-data-grid-plus</h1>
 
       <h2>Demos</h2>
       <Link to="/CommonFeatures">Common Features</Link>

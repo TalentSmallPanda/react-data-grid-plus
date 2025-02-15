@@ -1,0 +1,31 @@
+name: Deploy to GitHub Pages
+
+on:
+  # 触发工作流的事件，通常是push到main分支
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Use Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '20' # 选择你项目需要的 Node 版本
+
+      - name: Build
+        run: |
+          rm -rf package-lock.json && rm -rf node_modules
+          npm install
+          npm run build:website # 或者你的构建命令
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist # 指定dist文件夹作为发布目录

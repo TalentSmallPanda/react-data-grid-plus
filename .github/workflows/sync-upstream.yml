@@ -1,30 +1,43 @@
 name: Sync Upstream
 
 on:
-  # 每两周触发一次同步操作（每月1号和15号 UTC时间00:00）
   schedule:
-    - cron: '0 0 1,15 * *'
-  # 允许手动触发此工作流
-  workflow_dispatch:
+    - cron: '0 0 1,15 * *' # 每月1号和15号的0点触发
+  workflow_dispatch: # 允许手动触发此工作流
 
 jobs:
   sync:
-    # 定义要在哪种环境下运行这个任务，这里使用最新的Ubuntu
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        # 使用GitHub官方提供的动作来检出当前仓库的代码
+      - name: Checkout repository
         uses: actions/checkout@v4
-
-      - name: Sync Upstream
-        # 使用repo-sync的github-sync动作来进行仓库同步
-        uses: repo-sync/github-sync@v2
         with:
-          # 指定源仓库，这里是adazzle/react-data-grid
-          source_repo: 'adazzle/react-data-grid'
-          # 指定源仓库的分支，这里是main分支
-          source_branch: 'main'
-          # 指定目标仓库的分支，这里也是main分支，意味着同步到当前仓库的main分支
-          destination_branch: 'main'
-          # 使用GitHub自动提供的token来进行认证，允许推送更改
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Set up Git
+        run: |
+          git config --global user.name 'TalentSmallPanda'
+          git config --global user.email '1334762516@qq.com'
+
+      - name: Add upstream
+        run: git remote add upstream https://github.com/adazzle/react-data-grid.git
+
+      - name: Fetch upstream
+        run: git fetch upstream
+
+      - name: Merge upstream changes
+        run: git merge upstream/main --allow-unrelated-histories
+
+      - name: Push to sync-upstream branch
+        run: |
+          git checkout -b sync-upstream
+          git push origin sync-upstream -f
+
+      - name: Create pull request
+        uses: peter-evans/create-pull-request@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'Merge upstream changes'
+          branch: 'sync-upstream'
+          title: 'Sync upstream'
+          body: 'This PR syncs the upstream changes.'
